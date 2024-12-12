@@ -15,15 +15,15 @@ type MarketsProps = PlaceProps & {
   longitude: number
 }
 
-const currentLocation = {
-  latitude: -23.561187293883442,
-  longitude: -46.656451388116494,
-}
 
 export default function Home() {
   const [categories, setCategories] = useState<CategoriesProps[]>([])
   const [category, setCategory] = useState("")
   const [markets, setMarkets] = useState<MarketsProps[]>([])
+  const [currentLocation, setCurrentLocation] = useState({
+    latitude: -23.561187293883442,
+    longitude: -46.656451388116494,
+  })
 
   async function fetchCategories() {
     try {
@@ -59,6 +59,10 @@ export default function Home() {
       if (granted) {
         const location = await Location.getCurrentPositionAsync()
         console.log(location)
+        setCurrentLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        })
       }
     } catch (error) {
       console.log(error)
@@ -68,6 +72,10 @@ export default function Home() {
   useEffect(() => {
     fetchCategories();
   }, [])
+
+  /* useEffect(() => {
+    getCurrentLocation()
+  }, [currentLocation.latitude, currentLocation.longitude]) */
 
   useEffect(() => {
     fetchMarkets();
