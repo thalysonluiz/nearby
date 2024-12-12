@@ -112,8 +112,8 @@ export default function Home() {
             }}
             image={require("@/assets/pin.png")}
           >
-            <Callout onPress={() => router.navigate(`/market/${item.id}`)}>
-              <View>
+            <Callout style={{ flex: 1 }} onPress={() => router.navigate(`/market/${item.id}`)}>
+              <View style={{ width: 100, height: 50 }}>
                 <Text
                   style={{
                     fontSize: 14,
