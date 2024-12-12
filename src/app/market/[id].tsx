@@ -6,6 +6,8 @@ import { api } from "@/services/api"
 import { Loading } from "@/components/Loading";
 import { Cover } from "@/components/market/Cover";
 import { Details, PropsDetails } from "@/components/market/Details";
+import { Coupon } from "@/components/market/Coupon";
+import { Button } from "@/components/Button";
 
 type DataProps = PropsDetails & {
   cover: string
@@ -13,6 +15,7 @@ type DataProps = PropsDetails & {
 
 export default function Market() {
   const [data, setData] = useState<DataProps>()
+  const [coupon, setCoupon] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   const params = useLocalSearchParams<{ id: string }>()
@@ -33,6 +36,24 @@ export default function Market() {
     }
   }
 
+  async function getCoupon(id: string) {
+    try {
+
+
+      const { data } = await api.patch("/coupons/" + id)
+
+      Alert.alert("Cupom", data.coupon)
+      setCoupon(data.coupon)
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro", "Não foi possível utilizar o cupom")
+    } finally {
+
+    }
+  }
+
+  async function handleOpenCamera() { }
+
   useEffect(() => {
     fetchMarket()
   }, [params.id])
@@ -49,6 +70,13 @@ export default function Market() {
     <View style={{ flex: 1 }}>
       <Cover uri={data.cover} />
       <Details data={data} />
+      {coupon && <Coupon code={coupon} />}
+
+      <View style={{ padding: 32 }}>
+        <Button onPress={handleOpenCamera}>
+          <Button.Title>Ler QR Code</Button.Title>
+        </Button>
+      </View>
     </View>
   )
 }
