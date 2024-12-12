@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 
 import { api } from "@/services/api"
 import { Loading } from "@/components/Loading";
 import { Cover } from "@/components/market/Cover";
+import { Details, PropsDetails } from "@/components/market/Details";
 
-type DataProps = {
+type DataProps = PropsDetails & {
   cover: string
 }
 
@@ -40,9 +41,14 @@ export default function Market() {
     return <Loading />
   }
 
+  if (!data) {
+    return <Redirect href="/home" />
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Cover uri={data.cover} />
+      <Details data={data} />
     </View>
   )
 }
